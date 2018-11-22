@@ -1,0 +1,23 @@
+<div class="ui three wide column computer tablet only" style="
+  padding-left: 0px !important;padding-right: 0px !important;padding-top: 0px !important;padding-bottom: 0px !important; background-color: #333;height:200px;">
+    <div class="ui middle aligned one column centered grid" style="height:200px;">
+      <div class="column" style="text-align: center;">
+        <img class="ui tiny centered image" src="/images/avatars/<%= getbasename(user.avatar) %>">
+        <a href="/users/<%= user.id %>" style="color: white;">
+           <%= user.nickname %>
+        </a>
+      </div>
+    </div>
+</div>
+<div class="ui three wide column mobile only" style="
+  padding-left: 0px !important;padding-right: 0px !important;padding-top: 0px !important;padding-bottom: 0px !important;">
+  <div class="ui top attached segment"  style="background-color: green; display: flex; flex-direction: row;padding-top:10px;padding-bottom: 10px;padding-left: 30px;padding-right: 30px;">
+    <div class="ui rounded image small_shadow" style="background-image: url('/images/avatars/<%= getbasename(user.avatar) %>');height:50px; width:50px; background-color: #333; background-position-x: 50%; background-position-y: 50%; background-size: contain; background-repeat: no-repeat;"></div>
+      <!-- <img class="ui tiny image" src="/images/avatars/<%= getbasename(user.avatar) %>"> -->
+      <div style="margin-left:20px; line-height: 50px; ">
+        <a href="/users/<%= user.id %>" style="color: white;">
+           <%= user.nickname %>
+        </a>
+      </div>
+  </div>
+</div>

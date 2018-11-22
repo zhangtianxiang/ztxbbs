@@ -1,0 +1,138 @@
+<%- include('header') %>
+<%- include('components/topic_head') %>
+
+<div class="ui two column stackable grid small_shadow " style="margin-top:9px;">
+  <% if (creator) { %>
+  <%- include('components/topic_user_card',{user:creator}) %>
+  <% } else { %>
+  <%- include('components/topic_user_card_remove',{user:{nickname:topic.nickname}}) %>
+  <% } %>
+  <div class="ui thirteen wide column" style="display: flex; flex-direction: column; padding-left: 0px !important; padding-right: 0px !important; padding-top: 0px !important; padding-bottom: 0px !important;">
+    <div class="ztxbbs_post_time description small_font" >
+      发表于<%= moment(topic.create_time).fromNow() %>
+    </div>
+    <div class="ztxbbs_content" style="flex:2;">
+      <%- topic.content %>
+    </div>
+    <% if (topic.count_edit > 1) { %>
+    <div class="description small_font ztxbbs_edit_info">
+      最后于<%= moment(topic.last_edit_time).fromNow() %>编辑，总共编辑了<%= topic.count_edit %>次。
+    </div>
+    <% } %>
+    <% if (creator && creator.signature) { %>
+    <div class="ztxbbs_content ztxbbs_signature">
+      <%- creator.signature %>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+
+<% for (comment of topic.comments) { %>
+  <%- include('components/topic_comment', {comment: comment}) %>
+<% } %>
+<% if (user) { %>
+<%- include('components/comment_create') %>
+<% } %>
+
+<div class="ui small modal" id="comment_modal">
+
+  <i class="close icon"></i>
+  <div class="header">修改回复</div>
+  <div class="ui container">
+    <form class="ui form segment" action="" method="post" enctype="multipart/form-data" id="comment_modal_form">
+      <div class="field">
+        <textarea name="raw_content" rows="15" id="comment_modal_content"></textarea>
+      </div>
+      <input type="submit" class="ui fluid large teal submit button" value="保存修改">
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".ztxbbs_innerlink").bind('click', function(event) {
+        event.stopPropagation();
+    });
+  });
+  function OnClick(ele) {
+    var url = ele.getAttribute('href');
+    window.location.href = url;
+  };
+
+  function removeTopicAction(tid) { //ok
+    var url = '/community/forums/topics/'+tid+'/remove';
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          iziToast.success({
+              title: 'OK',
+              message: res.data.info,
+              position: 'bottomRight',
+              transitionIn: 'bounceInLeft'
+          });
+          setTimeout("self.location=document.referrer",3000); // return & refresh
+        } else {
+          iziToast.info({
+              title: 'info',
+              message: res.data.info,
+              position: 'bottomLeft',
+              transitionIn: 'bounceInRight'
+          });
+        }
+      } else {
+        iziToast.error({
+            title: 'Error',
+            message: 'get data failed: '+res.status,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    }).catch(err => {
+      iziToast.error({
+            title: 'error',
+            message: err.message,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+    });
+  };
+
+  function removeCommmentAction(cid) {
+    var url = '/community/forums/topics/comments/'+cid+'/remove';
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.data.status == true) {
+        iziToast.success({
+            title: 'OK',
+            message: res.data.info,
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft'
+        });
+        setTimeout("self.location=document.referrer",3000); // return & refresh
+      } else {
+        iziToast.info({
+            title: 'info',
+            message: res.data.info,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    })
+  };
+
+  $('#comment_modal')
+    // .modal({blurring: true})
+    .modal('setting', 'transition', 'fly down')
+    // .modal('attach events', '#nav_upload', 'show')
+  ;//弹出层
+
+  function editCommentShow(cid) {
+    $('#comment_modal_content').text($('#'+cid).attr('raw_content'));
+    $('#comment_modal_form').attr({action:'/community/forums/topics/comments/'+cid+'/edit'});
+    $('.ui.modal').modal('show');
+  };
+</script>  
+
+<%- include('footer') %>

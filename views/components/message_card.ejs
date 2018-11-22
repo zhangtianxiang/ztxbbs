@@ -1,0 +1,20 @@
+<div class="event">
+  <div class="label">
+    <a href="/users/<%= message.type?message.other_id:user.id %>">
+      <img src="/images/avatars/<%= message.type? getbasename(message.other_avatar):getbasename(user.avatar) %>">
+    </a>
+  </div>
+  <div class="content ztxbbs_clickable" href="/users/messages/<%= message.id %>" onclick="OnClick2(this);">
+    <div class="summary">
+      <% if (message.type) { %>
+      <a href="/users/<%= message.other_id %>"><%= message.other_nickname %></a> 给你发送了私信
+      <% } else { %>
+       你发送了私信给 <a href="/users/<%= message.other_id %>"><%= message.other_nickname %></a>
+      <% } %>
+      <div class="date"><%= moment(message.create_time).fromNow() %></div>
+    </div>
+    <div class="extra text">
+      <%= message.abstract %>
+    </div>
+  </div>
+</div>

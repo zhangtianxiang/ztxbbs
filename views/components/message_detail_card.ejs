@@ -1,0 +1,21 @@
+<div class="ui two column stackable grid small_shadow" style="margin-top: 20px" id="messages">
+  <% if (message.type) { %>
+  <%- include('message_user_card',{user:{id:message.other_id,nickname:message.other_nickname,avatar:message.other_avatar}}) %>
+  <% } else { %>
+  <%- include('message_user_card',{user:user}) %>
+  <% } %>
+  <div class="thirteen wide column">
+    <div class="description middle_font" >
+      <%= moment(message.create_time).fromNow() %>
+      <% if (message.type) { %>
+      <a href="/users/<%= message.other_id %>"><%= message.other_nickname %></a> 给你发送了私信
+      <% } else { %>
+       你发送了私信给 <a href="/users/<%= message.other_id %>"><%= message.other_nickname %></a>
+      <% } %>
+    </div>
+    <div class="ui divider"></div>
+    <div class="extra text">
+      <%- message.content %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="ui grid">
+  <div class="ui column ztxbbs_user_banner small_shadow" style="background-image: url('/images/usercover/<%= getbasename(user.cover) %>'); display: flex; flex-direction: column-reverse;">
+    <div class="ui items">
+
+      <div class="item">
+        <div class="image">
+          <div class="ui rounded image" style="background-image: url('/images/avatars/<%= getbasename(user.avatar) %>');height:110px; width:110px; background-color: #333; margin-left: 30px; background-position-x: 50%; background-position-y: 50%; background-size: contain; background-repeat: no-repeat; box-shadow:2px 2px 8px 0px #333"></div>
+        </div>
+
+        <div class="middle aligned content">
+
+          <div class="header ztxbbs_header_big">
+            <%= user.nickname %>
+          </div>
+          <!-- <div class="ui divider"></div> -->
+          <div class="description ztxbbs_header_small">
+            <%= user.description %>
+          </div>
+          <div class="description">
+            <button class="circular ui icon button" id="unfollowbtn" title="已关注，取消关注" style="display: <%= followed?'':'none' %>;" onclick="javascript:unfollowAction(<%= user.id %>)"><i class="star icon"></i></button>
+            <button class="circular ui icon button" id="followbtn" title="关注" style="display: <%= followed?'none':'' %>;" onclick="javascript:followAction(<%= user.id %>)"><i class="star outline icon"></i></button>
+            <button class="circular ui icon button" id="unbanbtn" title="已拉黑，取消拉黑" style="display: <%= banned?'':'none' %>;" onclick="javascript:unbanAction(<%= user.id %>)"><i class="eye icon"></i></button>
+            <button class="circular ui icon button" id="banbtn" title="拉黑" style="display: <%= banned?'none':'' %>;" onclick="javascript:banAction(<%= user.id %>)"><i class="eye slash icon"></i></button>
+            <button class="circular ui icon button" title="私信" ><i class="envelope icon" onclick="window.location.href='/users/messages/send?user_id=<%= user.id %>'"></i></button>
+            <% if (edit) { %>
+            <button class="circular ui icon button" title="设置权限"><i class="edit icon" onclick="window.location.href='/users/<%= user.id %>/edit'"></i></button>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

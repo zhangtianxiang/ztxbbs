@@ -1,0 +1,29 @@
+<div class="ui grid">
+    <div class="ui column ztxbbs_forum_banner small_shadow" style=" background-image: url('/images/forumcover/<%= getbasename(forum.cover) %>');">
+        <% if (pre_forum_list && pre_forum_list.length>0) { %>
+            <div class="ui segment" style="background-color: #333333cc; height: 50px;">
+                <div class="ui breadcrumb">
+                    <% for (let i = pre_forum_list.length-1; i >= 0; i -- ) { let pref = pre_forum_list[i]; %>
+                      <a class="section" href="<%= '/community/forums/'+pref.id %>" style="color: #ccc !important;"><%= pref.title %></a>
+                      <i class="right angle icon divider" style="color: #ccc !important;"></i>
+                    <% } %>
+                    <a class="active section" href="<%= '/community/forums/'+forum.id %>" style="color: #fff !important;"><%= forum.title %></a>
+                </div>
+            </div>
+        <% } %>
+        <div class="ui header ztxbbs_header_big" style="position: absolute; bottom: 20px; left:40px;"><%= topic.title %></div>
+    <% if (edit_topic || remove_topic) { %>
+        <div class="ui bottom right attached label">
+        
+        <% if (edit_topic) { %>
+            <a href="/community/forums/topics/<%= topic.id %>/edit"><i class="edit icon"></i></a>
+        <% } %>
+    
+        <% if (remove_topic) { %>
+            <a href="javascript:removeTopicAction(<%= topic.id %>)"><i class="trash alternate icon"></i></a>
+        <% } %>
+
+        </div>
+    <% } %>
+    </div>
+</div>

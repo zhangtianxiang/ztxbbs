@@ -1,0 +1,62 @@
+<script type="text/javascript">
+  $(document).ready(function ($) {
+    <% if (error) { %>
+    iziToast.error({
+        title: 'Error',
+        message: <% if (error.message) { %>'<%= error.message %>'<% } else { %>'<%= error %>'<% } %>,
+        position: 'topRight',
+        transitionIn: 'fadeInDown'
+    });
+    <% } %>
+
+    <% if (warning) { %>
+    iziToast.warning({
+        title: 'Caution',
+        message: <% if (warning.message) { %>'<%= warning.message %>'<% } else { %>'<%= warning %>'<% } %>,
+        position: 'topLeft',
+        transitionIn: 'flipInX',
+        transitionOut: 'flipOutX'
+    });
+    <% } %>
+
+    <% if (success) { %>
+    iziToast.success({
+        title: 'Ok',
+        message: <% if (success.message) { %>'<%= success.message %>'<% } else { %>'<%= success %>'<% } %>,
+        position: 'bottomRight',
+        transitionIn: 'bounceInLeft',
+        // iconText: 'star',
+        // onOpen: function(){
+        //     console.log('callback abriu! success');
+        // },
+        // onClose: function(){
+        //     console.log("callback fechou! success");
+        // }
+    });
+    <% } %>
+
+    <% if (info) { %>
+    iziToast.info({
+        title: 'Info',
+        message: <% if (info.message) { %>'<%= info.message %>'<% } else { %>'<%= info %>'<% } %>,
+        // imageWidth: 70,
+
+        position: 'bottomLeft',
+        transitionIn: 'bounceInRight',
+        // rtl: true,
+        // iconText: 'star',
+        // onOpen: function(){
+        //     console.log('callback abriu! info');
+        // },
+        // onClose: function(){
+        //     console.log("callback fechou! info");
+        // }
+    });
+    <% } %>
+    // var contentSections = $('.cd-section');
+    // $(".buttons li a").on('click', function(){
+    //     $(".buttons li").removeClass('active');
+    //     $(this).parent().addClass('active');
+    // });
+  });
+</script>

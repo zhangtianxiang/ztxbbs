@@ -1,0 +1,219 @@
+<%- include('header') %>
+<%- include('components/user_head',{user:show_user}) %>
+<div class="ui segments" style="margin-top:20px;">
+  <div class="ui segment">
+    <p>用户名 <%= show_user.username %>，邮箱 <%= show_user.email %>
+
+    <% if (user && (user.id==show_user.id && ((user.authority_user&(1<<1)) > 0))) { %>
+      <button class="ui tiny basic button" onclick="javascript:confirmAction()" id="confirmbtn"><i class="mail icon"></i>验证邮箱</button>
+      <button class="ui tiny basic disabled button" style="display: none;" id="confirmbtn2"><i class="mail icon"></i>验证邮箱</button>
+    <% } %>
+    </p>
+    <p><%= moment(Date.now()).diff(moment(show_user.birthday), 'years'); %>岁，<i class="<%= {'X':'venus mars','M': 'mars','F':'venus'}[show_user.sex] %> icon"></i>，来自<%= country_name[show_user.country] %>，贡献了<%= show_user.count_topics %>篇帖子</p>
+    <p>注册时间： <%= moment(show_user.register_time).format('YYYY年MM月') %></p>
+    <p>上次登陆： <%= moment(show_user.last_login_time).fromNow() %></p>
+    <p>现居城市： <%= show_user.city %></p>
+    <p>个人主页： <a href="<%= show_user.website %>" target="_blank"><%= show_user.website %></a></p>
+    <p>个人介绍： <p>
+      <div class="ui inverted segment">
+      <%- show_user.introduction %>
+      </div>
+    <p>签名档： <p>
+      <div class="ui inverted segment">
+      <%- show_user.signature %>
+      </div>
+    <p><%= show_user.count_followers %>人关注TA，TA关注了<%= show_user.count_followings %>人</p>
+  </div>
+  <!-- 最近发帖啥的 -->
+</div>
+<script type="text/javascript">
+  function changeBack() {
+    $("#confirmbtn").css("display","");
+    $("#confirmbtn2").css("display","none");
+  };
+  function confirmAction() {
+    var url = '/users/confirm';
+    axios.post(url).then(res => { // 正确写法
+      console.log(res.data);
+      if (res.status === 200) {
+        if (res.data.success) {
+          $("#confirmbtn").css("display","none");
+          $("#confirmbtn2").css("display","");
+          setTimeout("changeBack()",5000);
+
+          iziToast.success({
+              title: 'Ok',
+              message: res.data.info,
+              position: 'bottomRight',
+              transitionIn: 'bounceInLeft'
+          });
+        } else {
+          iziToast.error({
+              title: 'Error',
+              message: res.data.info,
+              position: 'bottomLeft',
+              transitionIn: 'bounceInRight'
+          });
+        }
+      } else {
+        iziToast.error({
+            title: 'Error',
+            message: 'get data failed: '+res.status,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    }).catch(err => {
+      iziToast.error({
+            title: 'error',
+            message: err.message,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+    });
+  };
+  function followAction(user_id) {
+    var url = '/users/follow?user_id='+user_id;
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.data.status == true) {
+        $("#followbtn").css("display","none");
+        $("#unfollowbtn").css("display","");
+        $("#banbtn").css("display","");
+        $("#unbanbtn").css("display","none");
+
+        iziToast.success({
+            title: 'Ok',
+            message: res.data.info,
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft'
+        });
+      } else {
+        iziToast.info({
+            title: 'Info',
+            message: res.data.info,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    })
+  }
+  function unfollowAction(user_id) {
+    var url = '/users/unfollow?user_id='+user_id;
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.data.status == true) {
+        $("#unfollowbtn").css("display","none");
+        $("#followbtn").css("display","");
+        $("#banbtn").css("display","");
+        $("#unbanbtn").css("display","none");
+
+        iziToast.success({
+            title: 'Ok',
+            message: res.data.info,
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft'
+        });
+      } else {
+        iziToast.info({
+            title: 'info',
+            message: res.data.info,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    })
+  }
+  function banAction(user_id) {
+    var url = '/users/ban?user_id='+user_id;
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.data.status == true) {
+        $("#unfollowbtn").css("display","none");
+        $("#followbtn").css("display","");
+        $("#banbtn").css("display","none");
+        $("#unbanbtn").css("display","");
+
+        iziToast.success({
+            title: 'Ok',
+            message: res.data.info,
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft'
+        });
+      } else {
+        iziToast.info({
+            title: 'info',
+            message: res.data.info,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    })
+  }
+  function unbanAction(user_id) {
+    var url = '/users/unban?user_id='+user_id;
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.data.status == true) {
+        $("#unfollowbtn").css("display","none");
+        $("#followbtn").css("display","");
+        $("#banbtn").css("display","");
+        $("#unbanbtn").css("display","none");
+
+        iziToast.success({
+            title: 'Ok',
+            message: res.data.info,
+            position: 'bottomRight',
+            transitionIn: 'bounceInLeft'
+        });
+      } else {
+        iziToast.info({
+            title: 'Info',
+            message: res.data.info,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+      }
+    })
+  }
+// function putUps(oid){
+//   var params ={
+//     oid:oid
+//   };
+//   $.ajax({
+//     data: params,
+//     url: '/addups',
+//     type:'post',
+//     jsonpCallback: 'callback',
+//     success: function(data){
+//       console.log(data);
+//       $('#putups'+oid).attr("title",data+'个赞');
+//       $('#putups'+oid).html("赞["+data+"]");
+    
+//     },
+//     error: function(jqXHR, textStatus, errorThrown){
+//       alert('error ' + textStatus + " " + errorThrown);  
+//     }
+//   });
+// }
+// function putDowns(oid){
+//   var params ={
+//     oid:oid
+//   };
+//   $.ajax({
+//     data: params,
+//     url: '/addowns',
+//     type:'post',
+//     jsonpCallback: 'callback',
+//     success: function(data){
+//       $('#putdowns'+oid).attr("title",data+'个踩');
+//       $('#putdowns'+oid).html("踩["+data+"]");
+    
+//     },
+//     error: function(jqXHR, textStatus, errorThrown){
+//       alert('error ' + textStatus + " " + errorThrown);  
+//     }
+//   });
+// }
+</script>
+<%- include('footer') %>

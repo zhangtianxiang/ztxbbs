@@ -1,0 +1,59 @@
+<%- include('header') %>
+<%- include('components/forum_head') %>
+<div class="ui two column stackable grid small_shadow" style="margin-top:9px;">
+  <% if (creator) { %>
+  <%- include('components/topic_user_card',{user: creator}) %>
+  <% } %>
+  <div class="thirteen wide column">
+    <form class="ui form basic segment" method="post" enctype="multipart/form-data">
+      <div class="field required">
+        <label>板块名</label>
+        <input placeholder="请输入板块的名称" type="text" name="title" value="<%= forum.title %>">
+      </div>
+      <div class="field">
+        <label>板块描述</label>
+        <input placeholder="请输入对板块的一句话描述" type="text" name="description" value="<%= forum.description %>">
+      </div>
+      <div class="field">
+        <label>父板块</label>
+        <input readonly="" type="text" value="<%= forum.title %>">
+      </div>
+      <div class="ui segment">
+        <div class="field">
+          <div class="ui toggle checkbox">
+            <input type="checkbox" name="sticky" tabindex="0" class="hidden" <%= forum.sticky?'checked':'' %> >
+            <label>在父板块中置顶</label>
+          </div>
+        </div>
+      </div>
+      <div class="field required">
+        <label>权限设置</label>
+        <div class="ui selection dropdown">
+          <input type="hidden" name="authority_topic" value="<%= forum.authority_topic %>">
+          <div class="default text">谁可以在本板块下发帖</div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-value="0">任何用户</div>
+            <div class="item" data-value="1">管理用户</div>
+            <div class="item" data-value="2">禁止发帖</div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>封面图</label>
+        <input type="file" name="cover">
+      </div>
+      <input type="submit" class="ui button fluid" value="保存">
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('.ui.checkbox')
+    .checkbox()
+  ;
+  $('.ui.selection.dropdown')
+    .dropdown()
+  ;
+</script>
+<%- include('footer') %>

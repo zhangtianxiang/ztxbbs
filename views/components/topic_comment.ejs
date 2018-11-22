@@ -1,0 +1,34 @@
+<div class="ui two column stackable grid small_shadow " style="margin-top:20px;">
+  <% if (comment.creator) { %>
+  <%- include('topic_user_card',{user:comment.creator}) %>
+  <% } else { %>
+  <%- include('topic_user_card_remove',{user:{nickname:comment.nickname}}) %>
+  <% } %>
+  <div class="ui thirteen wide column" style="display: flex; flex-direction: column; padding-left: 0px !important; padding-right: 0px !important; padding-top: 0px !important; padding-bottom: 0px !important;" id="<%= comment.id %>" raw_content="<%= comment.raw_content %>">
+
+
+    
+    <div class="ztxbbs_post_time description small_font" >
+      发表于<%= moment(comment.create_time).fromNow() %>
+    </div>
+    <div class="ztxbbs_content" style="flex:2;">
+      <%- comment.content %>
+    </div>
+    <% if (comment.count_edit > 1) { %>
+    <div class="description small_font ztxbbs_edit_info">
+      最后于<%= moment(comment.last_edit_time).fromNow() %>编辑，总共编辑了<%= comment.count_edit %>次。
+    </div>
+    <% } %>
+    <% if (comment.creator && comment.creator.signature) { %>
+    <div class="ztxbbs_content ztxbbs_signature">
+      <%- comment.creator.signature %>
+    </div>
+    <% } %>
+    <% if (comment.creator && user && comment.creator.id==user.id) { %>
+        <div class="ui top right attached label">
+            <a href="javascript:editCommentShow(<%= comment.id %>)"><i class="edit icon"></i></a>
+            <a href="javascript:removeCommmentAction(<%= comment.id %>)"><i class="trash alternate icon"></i></a>
+        </div>
+    <% } %>
+  </div>
+</div>

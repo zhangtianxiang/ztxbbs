@@ -1,0 +1,110 @@
+<%- include('header') %>
+<!-- 顶部banner -->
+<%- include('components/forum_head') %>
+<% if (forum.son && forum.son.length > 0) { %>
+    <% if (forum.topics && forum.topics.length > 0) { %>
+    <!-- 有子版块且有子帖，三级展开 -->
+    <div style="margin-top:20px;">
+        <% for (son of forum.son) { %>
+            <%- include('components/forum_gson',{forum: son}) %>
+        <% } %>
+    </div>
+    <% } else { %>
+    <!-- 有子版块且无子帖，四级展开 -->
+    <div style="margin-top:20px;">
+        <% for (son of forum.son) { %>
+            <%- include('components/forum_son',{forum: son}) %>
+        <% } %>
+    </div>
+    <% } %>
+<% } %>
+<!-- 添加子版块 -->
+<% if (forum.user_can_create_forum) { %>
+    <div class="ui segment ztxbbs_clickable ztxbbs_hover" href="<%= 'http://'+serverurl.toString()+'/community/forums/create_forum?forum_id='+forum.id.toString() %>" onclick="OnClick(this)"><p>添加子版块</p></div>
+<% } %>
+<!-- 置顶 -->
+<% if (forum.sticky_topics && forum.sticky_topics.length > 0) { %>
+
+  <div class="ui segments" id="topics">
+    <div class="ui top attached segment ztxbbs_hover_bg"><p>置顶主题</p></div>
+    <% for (topic of forum.sticky_topics) { %>
+      <%- include('components/forum_topic', {topic: topic}) %>
+    <% } %>
+  </div>
+<% } %>
+<!-- 子帖 -->
+<% if ((forum.topics && forum.topics.length > 0) || (forum.user_can_create_topic)) { %>
+<!-- sort -->
+<div class="ui fluid four item secondary pointing menu">
+  <a class="<%= sort==0?'active':'' %> item" href="/community/forums/<%= forum.id %>?sort=0">最新回复</a>
+  <a class="<%= sort==1?'active':'' %> item" href="/community/forums/<%= forum.id %>?sort=1">最新发布</a>
+  <a class="<%= sort==2?'active':'' %> item" href="/community/forums/<%= forum.id %>?sort=2">最多回复</a>
+  <a class="<%= sort==3?'active':'' %> item" href="/community/forums/<%= forum.id %>?sort=3">最多阅读</a>
+</div>
+    <!-- 添加子帖 -->
+    <div class="ui segments" id="topics">
+<% if (forum.user_can_create_topic) { %>
+    <div class="ui top attached segment ztxbbs_clickable ztxbbs_hover_bg" href="<%= 'http://'+serverurl.toString()+'/community/forums/topics/create_topic?forum_id='+forum.id.toString() %>" onclick="OnClick(this)"><p>发表帖子</p></div>
+<% } %>
+<% if (forum.topics && forum.topics.length > 0) { %>
+    <% for (topic of forum.topics) { %>
+        <%- include('components/forum_topic', {topic: topic}) %>
+    <% } %>
+<% } %>
+    </div>
+<% } %>
+
+<%- include('components/pagination') %>
+<!-- 防止a的冒泡事件 -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".ztxbbs_innerlink").bind('click', function(event) {
+        event.stopPropagation();
+    });
+  });
+  function OnClick(ele) {
+    var url = ele.getAttribute('href');
+    window.location.href = url;
+  };
+
+  function removeForumAction(fid) {
+    var url = '/community/forums/'+fid+'/remove';
+    axios.post(url).then(res => {
+      console.log(res.data);
+      if (res.status === 200) {
+        if (res.data.success === true) {
+          iziToast.success({
+              title: 'OK',
+              message: res.data.info,
+              position: 'bottomRight',
+              transitionIn: 'bounceInLeft'
+          });
+          setTimeout("self.location=document.referrer",3000); // return & refresh
+        } else {
+          iziToast.info({
+              title: 'info',
+              message: res.data.info,
+              position: 'bottomLeft',
+              transitionIn: 'bounceInRight'
+          });
+        }
+      } else {
+        iziToast.error({
+          title: 'Error',
+          message: 'get data failed: '+res.status,
+          position: 'bottomLeft',
+          transitionIn: 'bounceInRight'
+        });
+      }
+    }).catch(err => {
+      iziToast.error({
+            title: 'error',
+            message: err.message,
+            position: 'bottomLeft',
+            transitionIn: 'bounceInRight'
+        });
+    });
+  }
+</script>  
+
+<%- include('footer') %>

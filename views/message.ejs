@@ -1,0 +1,27 @@
+<%- include('header') %>
+<%- include('components/message_head') %>
+
+<div class="ui  segment ztxbbs_clickable ztxbbs_hover_bg" href="/users/messages/send" onclick="OnClick2(this)"><p>发送私信</p></div>
+<div class="ui feed" style="margin-top: 20px" id="messages">
+<% for (message of messages) { %>
+<%- include('components/message_card',{message:message}) %>
+<% } %>
+</div>
+
+<%- include('components/pagination') %>
+
+<!-- 防止a的冒泡事件 -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".ztxbbs_innerlink").bind('click', function(event) {
+        event.stopPropagation();
+    });
+  });
+  function OnClick2(ele) {
+    var url = ele.getAttribute('href');
+    window.open(url);
+    // window.location.href = url;
+  };
+</script>  
+
+<%- include('footer') %>

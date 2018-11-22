@@ -1,0 +1,55 @@
+<% if (pageinfo.tot > 1) { %>
+<div class="ui grid">
+  <div class="center aligned row">
+    <div class="ui horizontal link list sixteen width column">
+      <% if (pageinfo.now-6 == 1) { %>
+        <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-6)+pageinfo.tag %>')"><%= pageinfo.now-6 %></a>
+        <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-5)+pageinfo.tag %>')"><%= pageinfo.now-5 %></a>
+      <% } else if (pageinfo.now-6 > 1) { %>
+        <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page=1#topics' %>">1</a>
+        <a class="ui disabled basic button">...</a>
+      <% } %>
+      <% if (pageinfo.now-4 > 0){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-4)+pageinfo.tag %>')"><%= pageinfo.now-4 %></a>
+      <% } %>
+      <% if (pageinfo.now-3 > 0){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-3)+pageinfo.tag %>')"><%= pageinfo.now-3 %></a>
+      <% } %>
+      <% if (pageinfo.now-2 > 0){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-2)+pageinfo.tag %>')"><%= pageinfo.now-2 %></a>
+      <% } %>
+      <% if (pageinfo.now-1 > 0){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-1)+pageinfo.tag %>')"><%= pageinfo.now-1 %></a>
+      <% } %>
+
+      <a class="active item small_font" href="javascript:apost('<%= pageinfo.link+'page='+pageinfo.now+pageinfo.tag %>')"><%= pageinfo.now %></a>
+      <% if (pageinfo.now+1 <= pageinfo.tot){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+1)+pageinfo.tag %>')"><%= pageinfo.now+1 %></a>
+      <% } %>
+      <% if (pageinfo.now+2 <= pageinfo.tot){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+2)+pageinfo.tag %>')"><%= pageinfo.now+2 %></a>
+      <% } %>
+      <% if (pageinfo.now+3 <= pageinfo.tot){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+3)+pageinfo.tag %>')"><%= pageinfo.now+3 %></a>
+      <% } %>
+      <% if (pageinfo.now+4 <= pageinfo.tot){ %>
+      <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+4)+pageinfo.tag %>')"><%= pageinfo.now+4 %></a>
+      <% } %>
+      <% if (pageinfo.now+6 == pageinfo.tot) { %>
+        <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+5)+pageinfo.tag %>')"><%= pageinfo.now+5 %></a>
+        <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+6)+pageinfo.tag %>')"><%= pageinfo.now+6 %></a>
+      <% } else if (pageinfo.now+6 < pageinfo.tot) { %>
+        <a class="disabled item small_font">...</a>
+        <a class="item small_font" href="javascript:apost('<%= pageinfo.link+'page='+pageinfo.tot+pageinfo.tag %>')"><%= pageinfo.tot %></a>
+      <% } %>
+    <div>
+      <div class="ui horizontal link list sixteen width column">
+        <a class="<%= pageinfo.now==1 ? 'disabled':'' %> item" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now-1)+pageinfo.tag %>')"><i class="angle left icon"></i>上一页</a>
+        <a class="<%= pageinfo.now==pageinfo.tot ? 'disabled':'' %> item" href="javascript:apost('<%= pageinfo.link+'page='+(pageinfo.now+1)+pageinfo.tag %>')">下一页<i class="angle right icon"></i></a>
+      </div>
+    </div>
+    </div>
+  </div>
+  
+</div>
+<% } %>

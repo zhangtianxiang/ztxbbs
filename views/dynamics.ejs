@@ -1,0 +1,26 @@
+<%- include('header') %>
+<%- include('components/dynamic_head') %>
+
+<div class="ui feed" style="margin-top: 20px" id="dynamics">
+<% for (dynamic of dynamics) { %>
+<%- include('components/dynamic_card',{dynamic:dynamic}) %>
+<% } %>
+</div>
+
+<%- include('components/pagination2') %>
+
+<!-- 防止a的冒泡事件 -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".ztxbbs_innerlink").bind('click', function(event) {
+        event.stopPropagation();
+    });
+  });
+  function OnClick2(ele) {
+    var url = ele.getAttribute('href');
+    window.open(url);
+    // window.location.href = url;
+  };
+</script>  
+
+<%- include('footer') %>

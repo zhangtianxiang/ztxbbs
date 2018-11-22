@@ -1,0 +1,16 @@
+<div class="event">
+  <div class="label">
+    <a href="/users/<%= dynamic.user_id %>">
+      <img src="/images/avatars/<%= getbasename(dynamic.user_avatar) %>">
+    </a>
+  </div>
+  <div class="content">
+    <div class="summary">
+      <%= dynamic.header %>
+      <div class="date"><%= moment(dynamic.create_time).fromNow() %></div>
+    </div>
+    <div class="extra text">
+      <%= dynamic.content %>
+    </div>
+  </div>
+</div>

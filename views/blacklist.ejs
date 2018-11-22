@@ -1,0 +1,36 @@
+<%- include('header') %>
+<%- include('components/friend_head',{title:'黑名单'}) %>
+
+<div class="ui fluid three item secondary pointing menu">
+  <a class="item" href="/users/friends/following">关注</a>
+  <a class="item" href="/users/friends/follower">关注者</a>
+  <a class="active item" href="/users/friends/blacklist">黑名单</a>
+</div>
+
+<div class="ui basic segment" style="margin-top: 20px" id="blacklist">
+    <div class="ui three column stackable grid">
+      <% for (blacking of blacklist) { %>
+        <div class="column">
+          <%- include('components/user_card',{user:blacking}) %>
+        </div>
+      <% } %>
+    </div>
+</div>
+
+<%- include('components/pagination2') %>
+
+<!-- 防止a的冒泡事件 -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".ztxbbs_innerlink").bind('click', function(event) {
+        event.stopPropagation();
+    });
+  });
+  function OnClick(ele) {
+    var url = ele.getAttribute('href');
+    // window.open(url);
+    window.location.href = url;
+  };
+</script>  
+
+<%- include('footer') %>

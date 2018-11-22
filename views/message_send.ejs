@@ -1,0 +1,34 @@
+<%- include('header') %>
+<%- include('components/message_head') %>
+
+<forum class="ui two column stackable grid small_shadow" style="margin-top: 20px" id="messages">
+  <% if (send_to) { %>
+  <%- include('components/message_user_card',{user:send_to}) %>
+  <% } else { %>
+  <%- include('components/message_user_card',{user:user}) %>
+  <% } %>
+  <div class="thirteen wide column">
+    <form class="ui form basic segment" action="/users/messages/send" method="post" enctype="multipart/form-data">
+
+    <div class="description middle_font" >
+      <% if (send_to) { %>
+       发送私信给 <a href="/users/<%= send_to.id %>"><%= send_to.nickname %></a>
+      <% } else { %>
+       发送私信
+      <% } %>
+    </div>
+<div class="ui divider"></div>
+      <div class="field required" style="display: <%= send_to?'none':'' %>">
+        <label>收信人uid</label>
+        <input type="text" name="uid" placeholder="请输入收件人uid" <%= send_to?('value='+send_to.id+''):'' %> >
+      </div>
+      <div class="field required">
+        <label>内容</label>
+        <textarea placeholder="支持markdown语法" rows="10" type="text" name="raw_content"></textarea>
+      </div>
+      <input type="submit" class="ui button fluid" value="保存">
+    </form>
+  </div>
+</forum>
+
+<%- include('footer') %>

@@ -1,0 +1,23 @@
+<div class="ui segments">
+  <div class="ui top segment ztxbbs_clickable ztxbbs_hover" style="background-color: rgba(112,193,179,0.9); color:white;" href="<%= 'http://'+serverurl.toString()+'/community/forums/'+forum.id.toString() %>" onclick="OnClick(this)">
+    <div class="ui grid">
+      <div class="ui twelve wide computer sixteen wide tablet sixteen wide mobile column" style="padding-top: 10px; padding-bottom: 5px;">
+        <a class="big_font ztxbbs_innerlink big_text_shadow" href="<%= '/community/forums/'+forum.id %>" style="color:white;"><%= forum.title %></a>
+        <div class="description_white small_text_shadow"><%= forum.description %></div>
+      </div>
+      <div class="ui four wide computer only column" style="background-color: #eeeeee33; color:white;">
+        <div class="small_font">
+          <a href="<%= forum.last_reply_tid %>" class="ztxbbs_innerlink small_font ztxbbs_white_link oneline_text" title="<%= forum.last_reply_topic %>"><%= forum.last_reply_topic %></a>
+        </div>
+        <div class="small_font">
+          <%= moment(forum.last_reply_time).fromNow() %> by <a class="ztxbbs_innerlink ztxbbs_white_link" href="<%= '/users/'+forum.last_reply_uid %>"><%= forum.last_reply_nickname %></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if (forum.son && forum.son.length>0) { %>
+      <% for (son of forum.son) {%>
+          <%- include('forum_gson',{forum: son}) %>
+      <% } %>
+  <% } %>
+</div>

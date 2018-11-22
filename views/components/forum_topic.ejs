@@ -1,0 +1,32 @@
+<div class="ui segment ztxbbs_clickable ztxbbs_hover_bg" href="<%= '/community/forums/topics/'+topic.id %>" onclick="OnClick(this)">
+  <div class="ui three column stackable grid fix_margin">
+    <div class="ui ten wide column" style="padding-top: 10px !important; padding-bottom: 0px !important;">
+      <div>
+      <a class="ztxbbs_innerlink bond_font oneline_text" href="<%= '/community/forums/topics/'+topic.id %>"  title="<%= topic.title %>"><%= topic.title %></a>
+      </div>
+      <div class="small_font">
+        <a class="ztxbbs_innerlink small_font" href="<%= '/users/'+topic.user_id %>"><%= topic.nickname %></a>
+      </div>
+    </div>
+
+    <div class="ui two wide right aligned computer tablet only column">
+      <div class="small_font"><%= topic.count_view %> <i class="eye icon"></i></div>
+      <div class="small_font"><%= topic.count_reply %> <i class="comments icon"></i></div>
+    </div>
+
+    <div class="ui four wide right aligned computer tablet only column">
+      <div class="small_font">
+        最后回复：
+        <a href="<%= '/users/'+topic.last_reply_uid %>" class="ztxbbs_innerlink small_font"><%= topic.last_reply_nickname %></a>
+      </div>
+      <div class="small_font"><%= moment(topic.last_reply_time).fromNow() %></div>
+    </div>
+    <div class="ui mobile only column" style="padding-top: 5px !important; padding-bottom: 10px !important;">
+      <div class="small_font">
+        最后回复：
+        <a href="<%= '/users/'+topic.last_reply_uid %>" class="ztxbbs_innerlink small_font"><%= topic.last_reply_nickname %></a>
+      </div>
+      <div class="small_font"><%= moment(topic.last_reply_time).fromNow() %></div>
+    </div>
+  </div>
+</div>

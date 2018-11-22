@@ -1,0 +1,14 @@
+<div class="ui two column stackable grid small_shadow " style="margin-top:50px;">
+  <%- include('topic_user_card') %>
+
+  <div class="thirteen wide column">
+    <form class="ui form basic segment" action="/community/forums/topics/comments/create_comment?topic_id=<%= topic.id %>" method="post" enctype="multipart/form-data">
+      <div class="field required">
+        <label>回复</label>
+        <textarea placeholder="支持markdown语法" rows="10" type="text" name="raw_content"></textarea>
+      </div>
+      <input type="submit" class="ui button fluid" value="保存">
+    </form>
+  </div>
+
+</div>

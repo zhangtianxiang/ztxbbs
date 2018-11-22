@@ -1,0 +1,165 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../bbs');
+var debug = require('debug')('ztxbbs:server');
+var http = require('http');
+var sha1 = require('sha1')
+var userconfig = require('../config/userconfig')
+var models = require('../models');
+var tools = require('../tools');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.ZTXBBSPORT || (userconfig.port || '3000'));
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+if (process.argv.includes('DROPALL')) {
+  tools.inf('droping all databases');
+} else {
+  tools.inf('using previous databases');
+}
+
+models.sequelize.sync({ force: process.argv.includes('DROPALL') }).then(() => {
+  // 初始化root账号，一个网站必须有一个拥有所有权限的root账户
+  return models.User.findOne({where: {username: 'root'}}).then(user => {
+    const password = sha1(process.env.ZTXBBS || '123456')
+    if (!user) {
+      let newuser = {
+        username: 'root',
+        nickname: 'root',
+        password: password,
+        email: 'root@root.root',
+        authority_user: 0, // 已认证
+        authority_admin: 1 // 1<<0 拥有 所有权限
+      }
+      return models.User.create(newuser).then(user => {
+        tools.suc('root user has been created, default password is 123456')
+        if (!(process.env.ZTXBBS)) {
+          tools.war('you should set ZTXBBS in system environment variables or the default password may be known by others')
+        }
+        return null
+      }).catch(err => {
+        return tools.err('root user create failed',err)
+      })
+    } else if (password !== user.password) {
+      return user.update({
+        password: password
+      }).then(user => {
+        tools.suc('root password has been updated to ZTXBBS')
+      }).catch(err => {
+        return tools.err('root password update failed');
+      })
+    } else {
+      tools.inf('root user is ready')
+    }
+  })
+}).then(() => { // 初始化 forum0
+  let newforum = {
+    title: userconfig.bbstitle,
+    description: userconfig.bbsdescription,
+    authority_topic: 2, // 禁止在主版块发帖
+    user_id: 1,// 创建人为root
+    forum_id: null// 父板块必须为空才行
+  }
+  return models.Forum.findOne({where: {id:1}}).then((forum)=>{
+    if (!forum) {
+      return models.Forum.create(newforum).then(forum => {
+        tools.suc('top forum has been created')
+      }).catch(err => {
+        tools.err('top forum create failed', err)
+      })
+    } else if (forum.title !== newforum.title) {
+      return forum.update({
+        title: newforum.title
+      }).then(forum => {
+        tools.suc('top forum has been updated title to %s', newforum.title)
+      }).catch(err => {
+        tools.err('top forum update failed');
+      })
+    } else {
+      tools.inf('top forum is ready');
+    }
+  })
+}).then(function() {
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}).catch(function(err) {
+  tools.err('Unable to connect to the database:', err)
+})
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

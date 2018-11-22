@@ -1,0 +1,8 @@
+<div class="ui grid">
+  <div class="center aligned row">
+    <div class="ui horizontal link list sixteen width column">
+      <a class="<%= pageinfo.now==1 ? 'disabled':'' %> item" href="<%= pageinfo.link+'page='+(pageinfo.now-1)+pageinfo.tag %>"><i class="angle left icon"></i>上一页</a>
+      <a class="item" href="<%= pageinfo.link+'page='+(pageinfo.now+1)+pageinfo.tag %>">下一页<i class="angle right icon"></i></a>
+    </div>
+  </div>
+</div>

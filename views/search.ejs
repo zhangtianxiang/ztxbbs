@@ -1,0 +1,84 @@
+<%- include('header') %>
+<%- include('components/search_head') %>
+
+<div class="ui segments" style="margin-top:20px;">
+<form class="ui teal segment" action="/search?mode=<%= mode %>" method="post" enctype="multipart/form-data" id="search_form" orgurl="/search?mode=<%= mode %>">
+  <div class="ui fluid action icon input">
+    <input type="text" placeholder="" name="query" value="<%= query %>">
+    <i class="search icon"></i>
+  </div>
+</forum>
+<% if (query) { %>
+  <div class="ui fluid three item secondary pointing menu">
+    <a class="<%= show_all?'active':'' %> item" onclick="select_all()" id="select_all">所有<%= count_all>0?'('+count_all+')':'' %></a>
+    <a class="<%= (!show_all&&show_user)?'active':'' %> item" onclick="select_user()" id="select_user">用户<%= count_user>0?'('+count_user+')':'' %></a>
+    <a class="<%= (!show_all&&show_topic)?'active':'' %> item" onclick="select_topic()" id="select_topic">主题<%= count_topic>0?'('+count_topic+')':'' %></a>
+  </div>
+  <div class="ui basic segment" id="result">
+    <% if (show_user && users && users.length>0) { %>
+      <div class="ui three column stackable grid">
+        <% for (user of users) { %>
+          <div class="column">
+            <%- include('components/user_card',{user:user}) %>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+    <% if (show_topic && topics && topics.length>0) { %>
+      <div class="ui segments" id="topics">
+        <% for (topic of topics) { %>
+          <%- include('components/forum_topic',{topic:topic}) %>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+<% } %>
+</div>
+<% if (show_all) { %>
+<div>
+  选择用户或主题进行搜索以得到更多结果
+</div>
+<% } %>
+<%- include('components/pagination3') %>
+<!-- 防止a的冒泡事件 -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".ztxbbs_innerlink").bind('click', function(event) {
+        event.stopPropagation();
+    });
+  });
+  function OnClick(ele) {
+    var url = ele.getAttribute('href');
+    window.location.href = url;
+  };
+  function select_all() {
+    $('#select_all').attr({class:'active item'});
+    $('#select_user').attr({class:'item'});
+    $('#select_topic').attr({class:'item'});
+    $('#search_form').attr({action:'/search?mode=all'});
+    // $('#result').hide(1000);
+    $('#search_form').submit();
+  };
+  function select_user() {
+    $('#select_all').attr({class:'item'});
+    $('#select_user').attr({class:'active item'});
+    $('#select_topic').attr({class:'item'});
+    $('#search_form').attr({action:'/search?mode=user'});
+    // $('#result').hide(1000);
+    $('#search_form').submit();
+  };
+  function select_topic() {
+    $('#select_all').attr({class:'item'});
+    $('#select_user').attr({class:'item'});
+    $('#select_topic').attr({class:'active item'});
+    $('#search_form').attr({action:'/search?mode=topic'});
+    // $('#result').hide(1000);
+    $('#search_form').submit();
+  };
+  function apost(url) {
+    $('#search_form').attr({action:url});
+    $('#search_form').submit();
+  }
+</script>  
+
+<%- include('footer') %>

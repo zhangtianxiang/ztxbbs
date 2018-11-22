@@ -1,0 +1,20 @@
+    </div>
+    <%- include('components/pagefooter') %>
+    <script type="text/javascript">
+      $('.ztxmenubtn')
+        .popup({
+          popup : $('.ztxmenu'),
+          on: 'click',
+          target: '.ztxtopleft',
+          // observeChanges: true,
+          lastResort: false,
+          transition: 'slide down'
+        })
+      ;
+      $('.ztxmenubtn')
+        .popup('reposition',true)
+      ;
+      
+    </script>
+  </body>
+</html>

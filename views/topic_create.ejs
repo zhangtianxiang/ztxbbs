@@ -1,0 +1,55 @@
+<%- include('header') %>
+<%- include('components/forum_head') %>
+<div class="ui two column stackable grid small_shadow"  style="margin-top:9px;">
+  <%- include('components/topic_user_card') %>
+  <div class="thirteen wide column ztxbbs_topic_card">
+    <form class="ui form basic segment" method="post" enctype="multipart/form-data">
+      <div class="field required">
+        <label>主题名</label>
+        <input placeholder="请输入主题的名称" type="text" name="title">
+      </div>
+      <div class="field required">
+        <label>主题内容</label>
+        <textarea placeholder="支持markdown语法" rows="15" type="text" name="raw_content"></textarea>
+      </div>
+      <% if ((user.authority_admin & (1|(1<<6)))>0) { %>
+        <div class="field required">
+          <label>权限设置</label>
+          <div class="ui selection dropdown">
+            <input type="hidden" name="authority_comment" value="0">
+            <div class="default text">谁可以在本主题下回复</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item" data-value="0">任何用户</div>
+              <div class="item" data-value="1">管理用户</div>
+              <div class="item" data-value="2">禁止回复</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui segment">
+          <div class="field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" name="sticky" tabindex="0" class="hidden">
+              <label>在板块中置顶</label>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      <!-- <div class="field required">
+        <label>封面图</label>
+        <input type="file" name="cover">
+      </div> -->
+      <input type="submit" class="ui button fluid" value="保存">
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $('.ui.checkbox')
+    .checkbox()
+  ;
+  $('.ui.selection.dropdown')
+    .dropdown()
+  ;
+</script>
+<%- include('footer') %>

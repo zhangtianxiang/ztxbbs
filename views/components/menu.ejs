@@ -1,0 +1,86 @@
+<div class="ui fluid container">
+  <div class="ui grid">
+    <div class="sixteen wide computer tablet only row">
+      <div class="ui borderless fixed inverted menu" style="height: 50px;">
+        <div class="ui container"  style="position: relative;">
+          <a href="/" class="header item">
+            <img src="/favicon.ico" style="height:40px;width:auto;">
+          </a>
+          <a href="/" class="item"><%= bbs.title %></a>
+          <% if (user) { %>
+          <a href="/community/dynamic" class="item">动态</a>
+          <a href="/users/messages" class="item">私信</a>
+          <% if (user.name == 'root') { %>
+          <a href="/community/manage" class="item">管理</a>
+          <% } %>
+          <a href="/search?mode=all" class="item">搜索</a>
+          <div class="ui simple dropdown item right floated" style="height: 50px;width: 50px;">
+            <!-- <a href="javascript:void(0)"> -->
+              <img class="ui mini rounded image" src="/images/avatars/<%= getbasename(user.avatar) %>" style="position:absolute;top:3px;right:0px; height:44px;width:auto;" onclick="void(0)">
+            <!-- </a> -->
+            <div class="ui inverted menu">
+              <a class="item" href="/users/<%= user.id %>">我的资料</a>
+              <a class="item" href="/users/friends">好友</a>
+              <div class="divider"></div>
+              <a class="item" href="/users/<%= user.id %>/edit">设置</a>
+              <a class="item" href="/users/signout">登出</a>
+            </div>
+          </div>
+          <% } else { %>
+          <div class="right menu">
+            <a class="item" href="/users/signin">登录</a>
+            <a class="item" href="/users/signup">注册</a>
+          </div>
+          <% } %>
+
+        </div>
+      </div>
+    </div>
+    <div class="sixteen wide mobile only column">
+      <div class="ui borderless fixed inverted menu" style="height: 50px">
+        <div class="ui container">
+
+
+          <a href="/" class="header item ztxtopleft">
+            <img src="/favicon.ico" style="height:40px;width:auto;">
+          </a>
+          <a href="/" class="item"><%= bbs.title %></a>
+          <% if (user) { %>
+
+          <div class="right menu">
+            <a href="/users/<%= user.id %>" class="item">
+              <img class="ui rounded image" src="/images/avatars/<%= getbasename(user.avatar) %>" style="height:45px;width:auto;padding-left: 0px;padding-right: 0px;">
+            </a>
+            <a href='javascript:void(0)' class="item ztxmenubtn" style="padding-left: 0px;padding-right: 0px;">
+              <i class="content icon" style="line-height: 38px;text-align: center;font-size:20px;width:45px;height:45px;border:3px solid;border-color: #ffffff66;border-radius: 4px;"></i>
+            </a>
+          </div>
+          <div class="ztxmenu ui inverted fluid popup bottom left transition hidden">
+            <div class="ui sixteen column">
+              <a href="/community/dynamic" class="item">动态</a>
+              <a href="/users/messages" class="item">私信</a>
+              <% if (user.username == 'root') { %>
+              <a href="/community/manage" class="item">管理</a>
+              <% } %>
+              <a href="/search?mode=all" class="item">搜索</a>
+              <div class="ui inverted divider"></div>
+              <a class="item" href="/users/<%= user.id %>">我的资料</a>
+              <a class="item" href="/users/friends">好友</a>
+              <div class="ui inverted divider"></div>
+              <a class="item" href="/users/<%= user.id %>/edit">设置</a>
+              <a class="item" href="/users/signout">登出</a>
+            </div>
+
+          </div>
+          <% } else { %>
+          <div class="right menu">
+            <a class="item" href="/users/signin">登录</a>
+            <a class="item" href="/users/signup">注册</a>
+          </div>
+          <% } %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
